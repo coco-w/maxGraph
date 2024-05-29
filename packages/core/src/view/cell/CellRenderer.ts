@@ -378,7 +378,8 @@ class CellRenderer {
         graph.isLabelClipped(state.cell),
         state.style.overflow,
         state.style.labelPadding,
-        state.style.textDirection ?? DEFAULT_TEXT_DIRECTION
+        state.style.textDirection ?? DEFAULT_TEXT_DIRECTION,
+        state.style.labelWidth
       );
       state.text.opacity = state.style.textOpacity ?? 100;
       state.text.dialect = isForceHtml ? DIALECT.STRICTHTML : graph.dialect;

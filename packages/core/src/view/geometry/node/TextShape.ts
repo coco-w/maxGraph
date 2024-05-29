@@ -81,7 +81,8 @@ class TextShape extends Shape {
     clipped = false,
     overflow: OverflowValue = 'visible',
     labelPadding = 0,
-    textDirection: TextDirectionValue = DEFAULT_TEXT_DIRECTION
+    textDirection: TextDirectionValue = DEFAULT_TEXT_DIRECTION,
+    labelWidth = 0
   ) {
     super();
 
@@ -107,6 +108,7 @@ class TextShape extends Shape {
     this.labelPadding = labelPadding ?? 0;
     this.textDirection = textDirection;
     this.rotation = 0;
+    this.labelWidth = labelWidth ?? 0;
 
     this.updateMargin();
   }
@@ -131,6 +133,7 @@ class TextShape extends Shape {
   clipped: boolean;
   overflow: OverflowValue;
   labelPadding: number;
+  labelWidth: number;
   textDirection: TextDirectionValue;
   margin: Point | null = null;
   unrotatedBoundingBox: Rectangle | null = null;
@@ -292,7 +295,9 @@ class TextShape extends Shape {
         this.overflow,
         this.clipped,
         this.getTextRotation(),
-        dir
+        dir,
+        this.labelWidth,
+        this.labelPadding
       );
     }
   }

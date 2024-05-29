@@ -576,7 +576,9 @@ abstract class AbstractCanvas2D {
     overflow: OverflowValue,
     clip: boolean,
     rotation: number,
-    dir: TextDirectionValue
+    dir: TextDirectionValue,
+    labelWidth?: number,
+    labelPadding?: number
   ): void;
 
   abstract updateText(

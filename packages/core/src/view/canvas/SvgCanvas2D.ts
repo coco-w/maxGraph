@@ -1400,7 +1400,9 @@ class SvgCanvas2D extends AbstractCanvas2D {
     overflow: OverflowValue,
     clip: boolean,
     rotation = 0,
-    dir: TextDirectionValue
+    dir: TextDirectionValue,
+    labelWidth: number,
+    labelPadding: number
   ) {
     if (this.textEnabled && str != null) {
       rotation = rotation != null ? rotation : 0;
@@ -1445,7 +1447,9 @@ class SvgCanvas2D extends AbstractCanvas2D {
           overflow,
           clip,
           rotation,
-          dir
+          dir,
+          labelWidth,
+          labelPadding
         );
       }
     }
@@ -1500,7 +1504,9 @@ class SvgCanvas2D extends AbstractCanvas2D {
     overflow: OverflowValue,
     clip: boolean,
     rotation = 0,
-    dir: TextDirectionValue
+    dir: TextDirectionValue,
+    labelWidth = 0,
+    labelPadding = 0
   ) {
     const s = this.state;
     const size = s.fontSize;
@@ -1624,7 +1630,6 @@ class SvgCanvas2D extends AbstractCanvas2D {
         // LATER: Match horizontal HTML alignment
         text.setAttribute('x', String(this.format(x * s.scale) + this.textOffset));
         text.setAttribute('y', String(this.format(cy * s.scale) + this.textOffset));
-
         write(text, line);
         node.appendChild(text);
       }
@@ -1642,7 +1647,9 @@ class SvgCanvas2D extends AbstractCanvas2D {
       overflow === 'fill' ? h : textHeight,
       align,
       valign,
-      overflow
+      overflow,
+      labelWidth,
+      labelPadding
     );
   }
 
@@ -1683,7 +1690,9 @@ class SvgCanvas2D extends AbstractCanvas2D {
     h: number,
     align: AlignValue,
     valign: VAlignValue,
-    overflow: OverflowValue
+    overflow: OverflowValue,
+    labelWidth: number,
+    labelPadding: number
   ) {
     const s = this.state;
 
@@ -1713,9 +1722,16 @@ class SvgCanvas2D extends AbstractCanvas2D {
       } else if (node.getBBox != null && this.root.ownerDocument === document) {
         // Uses getBBox only if inside document for correct size
         try {
+          const labelScaleWidth = (labelWidth + labelPadding) * s.scale;
+          const labelScaleHeight = labelPadding * s.scale;
           // @ts-ignore getBBox exists
           bbox = node.getBBox();
-          bbox = new Rectangle(bbox.x, bbox.y + 1, bbox.width, bbox.height + 0);
+          bbox = new Rectangle(
+            labelScaleWidth ? bbox.x + bbox.width / 2 - labelScaleWidth / 2 : bbox.x,
+            labelScaleHeight ? bbox.y + bbox.height / 2 - labelScaleHeight / 2 : bbox.y,
+            labelScaleWidth ? labelScaleWidth : bbox.width,
+            labelScaleHeight ? labelScaleHeight : bbox.height
+          );
         } catch (e) {
           // Ignores NS_ERROR_FAILURE in FF if container display is none.
         }
